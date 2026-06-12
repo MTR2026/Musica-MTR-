@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MTR Fight Channel — Música de Entrada / Entrance Music</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#e8000d;--redg:rgba(232,0,13,.08);
+  --bg:#f0ede8;--bg2:#e8e4de;--bg3:#dedad3;--bg5:#fff;
+  --ink:#1a1714;--ink2:#3d3830;--ink3:#7a7268;--ink4:#b0a89e;
+  --bd:rgba(0,0,0,.09);--bd2:rgba(0,0,0,.18);
+  --gold:#b8860b;--green:#008550;
+  --fn:'Bebas Neue',sans-serif;--fc:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);min-height:100vh}
+.hdr{background:var(--ink);border-bottom:3px solid var(--red);padding:0 24px;display:flex;align-items:center;gap:14px;height:56px}
+.badge{background:var(--red);padding:6px 12px;line-height:1;display:flex;flex-direction:column;align-items:center}
+.badge-top{font-family:var(--fn);font-size:18px;color:#fff;letter-spacing:2px}
+.badge-bot{font-family:var(--fc);font-size:7px;color:rgba(255,255,255,.7);letter-spacing:3px;text-transform:uppercase;margin-top:1px}
+.hdr-txt{padding-left:12px;border-left:1px solid #444}
+.hdr-title{font-family:var(--fn);font-size:17px;letter-spacing:3px;color:#fff}
+.hdr-sub{font-family:var(--fc);font-size:9px;color:#888;letter-spacing:4px;text-transform:uppercase;margin-top:1px}
+.lang-switch{margin-left:auto;display:flex;gap:0;border:1px solid #444;overflow:hidden}
+.lang-btn{background:none;border:none;color:#888;font-family:var(--fc);font-size:11px;letter-spacing:1px;padding:5px 10px;cursor:pointer;transition:all .15s}
+.lang-btn.active{background:var(--red);color:#fff}
+.lang-btn:hover:not(.active){background:#333;color:#fff}
+.wrap{max-width:600px;margin:0 auto;padding:32px 24px}
+.hero{background:var(--ink);padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-20px;right:-20px;width:120px;height:120px;background:var(--red);opacity:.08;border-radius:50%}
+.hero-title{font-family:var(--fn);font-size:36px;letter-spacing:3px;color:#fff;line-height:1;margin-bottom:6px}
+.hero-sub{font-family:var(--fc);font-size:11px;color:#888;letter-spacing:3px;text-transform:uppercase}
+.hero-bar{height:3px;background:var(--red);margin-top:16px;width:50px}
+.card{background:var(--bg5);border:1px solid var(--bd);border-top:3px solid var(--red);padding:24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.card-title{font-family:var(--fn);font-size:18px;letter-spacing:3px;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.card-title::before{content:'';display:block;width:3px;height:18px;background:var(--red);flex-shrink:0}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-family:var(--fc);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3)}
+.req{color:var(--red);margin-left:2px}
+.field input,.field select,.field textarea{
+  background:var(--bg2);border:1px solid var(--bd2);color:var(--ink);
+  font-family:var(--fc);font-size:15px;padding:11px 12px;outline:none;
+  width:100%;transition:border-color .15s;
+}
+.field textarea{resize:vertical;min-height:70px;font-size:13px;font-family:var(--fb)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);background:var(--bg5)}
+.field .hint{font-family:var(--fc);font-size:10px;color:var(--ink4);letter-spacing:1px;margin-top:2px}
+.field .err{font-family:var(--fc);font-size:10px;color:var(--red);letter-spacing:1px;margin-top:3px;display:none}
+.field.invalid input,.field.invalid select{border-color:var(--red)}
+.field.invalid .err{display:block}
+.cue-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cue-row input{text-align:center;font-family:var(--fn);font-size:24px;letter-spacing:1px}
+.cue-row span.sep{font-family:var(--fn);font-size:20px;color:var(--ink4)}
+.btn-submit{
+  width:100%;background:var(--red);border:none;color:#fff;
+  font-family:var(--fn);font-size:20px;letter-spacing:4px;text-transform:uppercase;
+  padding:16px;cursor:pointer;transition:background .15s;margin-top:8px;
+}
+.btn-submit:hover{background:#c0000b}
+.btn-submit:disabled{background:var(--ink3);cursor:not-allowed}
+.success{display:none;text-align:center;padding:48px 24px}
+.success.show{display:block}
+.success-icon{font-size:64px;margin-bottom:16px}
+.success-title{font-family:var(--fn);font-size:32px;letter-spacing:3px;margin-bottom:10px}
+.success-msg{font-family:var(--fc);font-size:13px;color:var(--ink3);letter-spacing:1px;line-height:1.7}
+.config-banner{background:#fffbe6;border:1px solid var(--gold);border-left:3px solid var(--gold);padding:12px 16px;margin-bottom:20px;display:none}
+.config-banner.show{display:block}
+.config-banner p{font-family:var(--fc);font-size:12px;color:var(--gold);letter-spacing:.5px;line-height:1.6}
+.config-banner code{background:rgba(0,0,0,.06);padding:1px 6px;font-size:11px}
+.footer{text-align:center;padding:24px;font-family:var(--fc);font-size:10px;color:var(--ink4);letter-spacing:2px;text-transform:uppercase}
+.example-tag{display:inline-block;background:var(--bg3);color:var(--ink3);font-family:var(--fc);font-size:10px;letter-spacing:1px;padding:3px 8px;margin:2px 4px 2px 0}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="badge"><div class="badge-top">MTR</div><div class="badge-bot">Fight Channel</div></div>
+  <div class="hdr-txt">
+    <div class="hdr-title" data-i18n="hdr_title">MÚSICA DE ENTRADA</div>
+    <div class="hdr-sub" data-i18n="hdr_sub">Entrance Music</div>
+  </div>
+  <div class="lang-switch">
+    <button class="lang-btn active" onclick="setLang('es',this)">🇪🇸 ES</button>
+    <button class="lang-btn" onclick="setLang('en',this)">🇬🇧 EN</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="config-banner" id="config-banner">
+    <p>⚠️ <strong data-i18n="cfg_title">Configuración pendiente:</strong> <span data-i18n="cfg_body">añade tus claves de EmailJS en el script al final del archivo.</span></p>
+  </div>
+
+  <div id="form-wrap">
+    <div class="hero">
+      <div class="hero-title" data-i18n="hero_title">TU MÚSICA</div>
+      <div class="hero-sub" data-i18n="hero_sub">Indícanos la canción y el momento exacto de entrada al ring</div>
+      <div class="hero-bar"></div>
+    </div>
+
+    <!-- FIGHTER ID -->
+    <div class="card">
+      <div class="card-title" data-i18n="card_id">Identificación</div>
+      <div class="grid g2">
+        <div class="field" id="f-nombre">
+          <label><span data-i18n="lbl_nombre">Nombre</span> <span class="req">*</span></label>
+          <input id="nombre" type="text" data-i18n-ph="ph_nombre" placeholder="Tu nombre" autocomplete="given-name">
+          <span class="err" data-i18n="err_req">Obligatorio</span>
+        </div>
+        <div class="field" id="f-apellido">
+          <label><span data-i18n="lbl_apellido">Apellido</span> <span class="req">*</span></label>
+          <input id="apellido" type="text" data-i18n-ph="ph_apellido" placeholder="Tu apellido" autocomplete="family-name">
+          <span class="err" data-i18n="err_req">Obligatorio</span>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field">
+          <label data-i18n="lbl_apodo">Apodo / Nick</label>
+          <input id="apodo" type="text" data-i18n-ph="ph_apodo" placeholder="El Toro, La Cobra...">
+        </div>
+        <div class="field">
+          <label data-i18n="lbl_evento">Evento</label>
+          <input id="evento" type="text" data-i18n-ph="ph_evento" placeholder="MTR YIN MAD FIGHT...">
+        </div>
+      </div>
+    </div>
+
+    <!-- MUSIC -->
+    <div class="card">
+      <div class="card-title" data-i18n="card_music">Música de entrada</div>
+
+      <div class="field" id="f-link">
+        <label><span data-i18n="lbl_link">Enlace de la canción</span> <span class="req">*</span></label>
+        <input id="link" type="url" placeholder="https://youtube.com/watch?v=... · https://open.spotify.com/...">
+        <span class="err" data-i18n="err_req">Obligatorio</span>
+        <div style="margin-top:8px">
+          <span class="example-tag">YouTube</span>
+          <span class="example-tag">Spotify</span>
+          <span class="example-tag">SoundCloud</span>
+          <span class="example-tag">Google Drive</span>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field">
+          <label data-i18n="lbl_song">Título de la canción</label>
+          <input id="song" type="text" data-i18n-ph="ph_song" placeholder="Eye of the Tiger">
+        </div>
+        <div class="field">
+          <label data-i18n="lbl_artist">Artista</label>
+          <input id="artist" type="text" data-i18n-ph="ph_artist" placeholder="Survivor">
+        </div>
+      </div>
+
+      <div style="margin-top:18px">
+        <label style="font-family:var(--fc);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3)">
+          <span data-i18n="lbl_cue">Minuto exacto de entrada (cue point)</span> <span class="req">*</span>
+        </label>
+        <div class="cue-row" style="margin-top:6px">
+          <input id="cue-min" type="number" min="0" max="59" placeholder="0" style="max-width:70px">
+          <span class="sep">:</span>
+          <input id="cue-sec" type="number" min="0" max="59" placeholder="00" style="max-width:70px">
+          <span style="font-family:var(--fc);font-size:11px;color:var(--ink3);margin-left:8px" data-i18n="lbl_cue_hint">— momento exacto en que debe empezar a sonar</span>
+        </div>
+        <span class="err" id="e-cue" data-i18n="err_req">Obligatorio</span>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label data-i18n="lbl_duration">Duración deseada del fragmento</label>
+        <select id="duration">
+          <option value="15s" data-i18n="opt_15s">15 segundos</option>
+          <option value="30s" data-i18n="opt_30s" selected>30 segundos</option>
+          <option value="45s" data-i18n="opt_45s">45 segundos</option>
+          <option value="full" data-i18n="opt_full">Canción completa</option>
+        </select>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label data-i18n="lbl_notes">Notas adicionales</label>
+        <textarea id="notes" data-i18n-ph="ph_notes" placeholder="Ej: empezar con el estribillo, bajar volumen al entrar al ring..."></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button class="btn-submit" id="btn-submit" onclick="submitForm()">
+      <span id="btn-text" data-i18n="btn_submit">Enviar música</span>
+    </button>
+    <p style="font-family:var(--fc);font-size:10px;color:var(--ink4);letter-spacing:1px;text-align:center;margin-top:10px" data-i18n="submit_note">
+      Tu selección se enviará a info@muaythairevolution.com
+    </p>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="success-screen">
+    <div class="success-icon">🎵</div>
+    <div class="success-title" data-i18n="success_title">¡MÚSICA ENVIADA!</div>
+    <div class="success-msg">
+      <span data-i18n="success_msg">Tu selección musical ha llegado al equipo de MTR Fight Channel.<br>La usaremos para tu entrada al ring.</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer">MTR Fight Channel · mtrfightchannel.com</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  EMAILJS CONFIG
+//  Misma cuenta que el formulario de registro.
+//  Crea un NUEVO template en emailjs.com específico para
+//  música (variables: nombre, apodo, evento, link, song,
+//  artist, cue_point, duration, notes, lang) y pega su
+//  Template ID abajo.
+const EMAILJS_PUBLIC_KEY  = 'iiToiwmNCqRD9paS1';
+const EMAILJS_SERVICE_ID  = 'service_sir8ck9';
+const EMAILJS_TEMPLATE_ID = 'template_sx5zs29';
+const CONFIGURED = EMAILJS_TEMPLATE_ID !== 'TU_MUSIC_TEMPLATE_ID';
+if(!CONFIGURED) document.getElementById('config-banner').classList.add('show');
+if(CONFIGURED) emailjs.init({publicKey: EMAILJS_PUBLIC_KEY});
+
+// ── GOOGLE SHEETS ENDPOINT (música) ─────────────────────
+let SHEETS_URL = localStorage.getItem('mtr_music_sheets_url') || 'https://script.google.com/macros/s/AKfycbypPc28b5d-tRuEXLdj0Ye2KgNxKWCxM8l0afXRqhwIE54NGBZ2tv-X72wwdbvlPi2aFg/exec';
+const SHEETS_ENABLED_CHECK = () => SHEETS_URL && SHEETS_URL !== 'TU_MUSIC_SHEETS_URL';
+
+function buildImportLink(data){
+  const payload={v:1, type:'music_submission', data};
+  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
+
+async function sendToSheets(data, lang, importCode){
+  if(!SHEETS_ENABLED_CHECK()) return;
+  try {
+    await fetch(SHEETS_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...data, lang, importCode}),
+    });
+  } catch(err){ console.warn('Sheets send failed (non-critical):', err); }
+}
+
+// ── ADMIN PANEL (open with ?admin=1) ────────────────────
+function checkAdminMode(){
+  if(new URLSearchParams(window.location.search).get('admin')!=='1') return;
+  const panel=document.createElement('div');
+  panel.style.cssText='position:fixed;bottom:0;left:0;right:0;background:#1a1714;border-top:3px solid #e8000d;padding:16px 24px;z-index:999;display:flex;flex-direction:column;gap:10px';
+  panel.innerHTML=`
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#888;margin-bottom:4px">⚙️ PANEL DE CONFIGURACIÓN — solo visible con ?admin=1</div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1;min-width:260px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:4px">Google Sheets Web App URL (música)</div>
+        <input id="admin-sheets-url" type="text"
+          value="${SHEETS_ENABLED_CHECK()?SHEETS_URL:''}"
+          placeholder="https://script.google.com/macros/s/.../exec"
+          style="width:100%;background:#222;border:1px solid #444;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;padding:8px 12px;outline:none">
+      </div>
+      <button onclick="saveAdminConfig()"
+        style="background:#e8000d;border:none;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;cursor:pointer;white-space:nowrap">
+        Guardar
+      </button>
+      <span id="admin-saved" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#00c264;letter-spacing:2px;display:none">✓ Guardado</span>
+    </div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;color:#666;letter-spacing:1px">
+      Estado Sheets: <span id="admin-sheets-status" style="color:${SHEETS_ENABLED_CHECK()?'#00c264':'#e8000d'}">${SHEETS_ENABLED_CHECK()?'✓ Configurado':'✗ Sin configurar'}</span>
+      &nbsp;·&nbsp;
+      Estado EmailJS: <span style="color:${CONFIGURED?'#00c264':'#e8000d'}">${CONFIGURED?'✓ Configurado':'✗ Sin configurar'}</span>
+    </div>`;
+  document.body.appendChild(panel);
+  document.body.style.paddingBottom='130px';
+}
+
+function saveAdminConfig(){
+  const url=document.getElementById('admin-sheets-url').value.trim();
+  if(url){ SHEETS_URL=url; localStorage.setItem('mtr_music_sheets_url', url); }
+  const saved=document.getElementById('admin-saved');
+  const status=document.getElementById('admin-sheets-status');
+  saved.style.display='inline';
+  if(status){ status.textContent=url?'✓ Configurado':'✗ Sin configurar'; status.style.color=url?'#00c264':'#e8000d'; }
+  setTimeout(()=>saved.style.display='none', 2500);
+}
+
+document.addEventListener('DOMContentLoaded', checkAdminMode);
+
+// ══════════════════════════════════════════════════════
+//  TRANSLATIONS
+const LANGS = {
+  es: {
+    hdr_title:'MÚSICA DE ENTRADA', hdr_sub:'Selección musical',
+    hero_title:'TU MÚSICA', hero_sub:'Indícanos la canción y el momento exacto de entrada al ring',
+    card_id:'Identificación', card_music:'Música de entrada',
+    lbl_nombre:'Nombre', lbl_apellido:'Apellido', lbl_apodo:'Apodo / Nick', lbl_evento:'Evento',
+    lbl_link:'Enlace de la canción',
+    lbl_song:'Título de la canción', lbl_artist:'Artista',
+    lbl_cue:'Minuto exacto de entrada (cue point)',
+    lbl_cue_hint:'— momento exacto en que debe empezar a sonar',
+    lbl_duration:'Duración deseada del fragmento',
+    lbl_notes:'Notas adicionales',
+    opt_15s:'15 segundos', opt_30s:'30 segundos', opt_45s:'45 segundos', opt_full:'Canción completa',
+    ph_nombre:'Tu nombre', ph_apellido:'Tu apellido', ph_apodo:'El Toro, La Cobra...',
+    ph_evento:'MTR YIN MAD FIGHT...',
+    ph_song:'Eye of the Tiger', ph_artist:'Survivor',
+    ph_notes:'Ej: empezar con el estribillo, bajar volumen al entrar al ring...',
+    err_req:'Obligatorio',
+    btn_submit:'Enviar música',
+    submit_note:'Tu selección se enviará a info@muaythairevolution.com',
+    success_title:'¡MÚSICA ENVIADA!',
+    success_msg:'Tu selección musical ha llegado al equipo de MTR Fight Channel.<br>La usaremos para tu entrada al ring.',
+    cfg_title:'Configuración pendiente:',
+    cfg_body:'añade tus claves de EmailJS en el script al final del archivo.',
+    sending:'Enviando...',
+    error_send:'✕ Error al enviar — inténtalo de nuevo',
+  },
+  en: {
+    hdr_title:'ENTRANCE MUSIC', hdr_sub:'Music selection',
+    hero_title:'YOUR MUSIC', hero_sub:'Tell us the song and the exact moment for your ring entrance',
+    card_id:'Identification', card_music:'Entrance music',
+    lbl_nombre:'First name', lbl_apellido:'Last name', lbl_apodo:'Nickname', lbl_evento:'Event',
+    lbl_link:'Song link',
+    lbl_song:'Song title', lbl_artist:'Artist',
+    lbl_cue:'Exact entrance cue point',
+    lbl_cue_hint:'— exact moment the track should start',
+    lbl_duration:'Desired clip length',
+    lbl_notes:'Additional notes',
+    opt_15s:'15 seconds', opt_30s:'30 seconds', opt_45s:'45 seconds', opt_full:'Full song',
+    ph_nombre:'Your first name', ph_apellido:'Your last name', ph_apodo:'The Bull, The Cobra...',
+    ph_evento:'MTR YIN MAD FIGHT...',
+    ph_song:'Eye of the Tiger', ph_artist:'Survivor',
+    ph_notes:'E.g. start at the chorus, lower volume entering the ring...',
+    err_req:'Required',
+    btn_submit:'Submit music',
+    submit_note:'Your selection will be sent to info@muaythairevolution.com',
+    success_title:'MUSIC SUBMITTED!',
+    success_msg:'Your music selection has reached the MTR Fight Channel team.<br>We will use it for your ring entrance.',
+    cfg_title:'Setup required:',
+    cfg_body:'add your EmailJS keys in the script at the bottom of the file.',
+    sending:'Sending...',
+    error_send:'✕ Error — try again',
+  }
+};
+
+let currentLang = 'es';
+
+function setLang(lang, btn){
+  currentLang = lang;
+  document.getElementById('html-root').lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyTranslations();
+}
+
+function applyTranslations(){
+  const T = LANGS[currentLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(T[key] !== undefined){
+      if(key.includes('msg') || key.includes('body')) el.innerHTML = T[key];
+      else el.textContent = T[key];
+    }
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.dataset.i18nPh;
+    if(T[key] !== undefined) el.placeholder = T[key];
+  });
+}
+
+// ── HELPERS ────────────────────────────────────────────
+function v(id){ return (document.getElementById(id)?.value||'').trim(); }
+function setInvalid(fieldId, state){
+  document.getElementById('f-'+fieldId)?.classList.toggle('invalid', state);
+}
+
+function validate(){
+  const required = ['nombre','apellido','link'];
+  let ok = true;
+  required.forEach(id=>{
+    const empty = !v(id);
+    setInvalid(id, empty);
+    if(empty) ok = false;
+  });
+  const cueMin=v('cue-min'), cueSec=v('cue-sec');
+  const cueErr=document.getElementById('e-cue');
+  if(cueMin==='' && cueSec===''){
+    cueErr.style.display='block';
+    ok=false;
+  } else {
+    cueErr.style.display='none';
+  }
+  return ok;
+}
+
+// ── SUBMIT ─────────────────────────────────────────────
+async function submitForm(){
+  if(!validate()) return;
+  const btn = document.getElementById('btn-submit');
+  const btnText = document.getElementById('btn-text');
+  btn.disabled = true;
+  btnText.textContent = LANGS[currentLang].sending;
+
+  const cueMin = parseInt(v('cue-min'))||0;
+  const cueSec = parseInt(v('cue-sec'))||0;
+  const cuePoint = String(cueMin).padStart(2,'0')+':'+String(cueSec).padStart(2,'0');
+
+  const params = {
+    nombre:    v('nombre') + ' ' + v('apellido'),
+    apodo:     v('apodo')  || '—',
+    evento:    v('evento') || '—',
+    link:      v('link'),
+    song:      v('song')   || '—',
+    artist:    v('artist') || '—',
+    cue_point: cuePoint,
+    duration:  document.getElementById('duration').selectedOptions[0].textContent,
+    notes:     v('notes')  || '—',
+    to_email:  'info@muaythairevolution.com',
+    lang:      currentLang.toUpperCase(),
+  };
+
+  // Build import data for Budget Manager + Sheets
+  const importData = {
+    n:        params.nombre,
+    apodo:    v('apodo'),
+    evento:   v('evento'),
+    link:     v('link'),
+    song:     v('song'),
+    artist:   v('artist'),
+    cue:      cuePoint,
+    duration: params.duration,
+    notes:    v('notes'),
+  };
+  const importCode = buildImportLink(importData);
+  params.import_link = importCode;
+
+  if(!CONFIGURED){
+    console.log('Demo mode. Params:', params);
+    await sendToSheets(importData, currentLang.toUpperCase(), importCode);
+    showSuccess();
+    return;
+  }
+  try {
+    await Promise.all([
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params),
+      sendToSheets(importData, currentLang.toUpperCase(), importCode),
+    ]);
+    showSuccess();
+  } catch(err){
+    console.error('EmailJS error:', err);
+    btnText.textContent = LANGS[currentLang].error_send;
+    btn.style.background = '#c04040';
+    btn.disabled = false;
+  }
+}
+
+function showSuccess(){
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('success-screen').classList.add('show');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
